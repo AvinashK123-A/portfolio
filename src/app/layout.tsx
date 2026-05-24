@@ -1,32 +1,60 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const jetBrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
+
+const PORTFOLIO_URL = 'https://avinashk123-a-portfolio.vercel.app';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://avinash-reddy.dev'),
-  title: { default: 'Avinash Reddy K — Senior Flutter Engineer', template: '%s | Avinash Reddy K' },
-  description: 'Senior Software Engineer with 7+ years building production-scale Flutter & mobile applications.',
+  metadataBase: new URL(PORTFOLIO_URL),
+  title: {
+    default: 'Avinash Reddy | Senior Software Engineer',
+    template: '%s | Avinash Reddy',
+  },
+  description: 'Senior Flutter Engineer with 7+ years of experience. Expert in Clean Architecture, real-time mobile systems, payment integrations, and enterprise-grade applications.',
+  keywords: ['Avinash Reddy', 'Flutter Developer', 'Senior Software Engineer', 'Mobile Engineer', 'Flutter', 'Dart', 'Clean Architecture', 'India', 'AvinashK123-A'],
+  authors: [{ name: 'Avinash Reddy', url: PORTFOLIO_URL }],
+  creator: 'Avinash Reddy',
+  publisher: 'Avinash Reddy',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
   openGraph: {
     type: 'website',
-    url: 'https://avinash-reddy.dev',
-    title: 'Avinash Reddy K — Senior Flutter Engineer',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'en_US',
+    url: PORTFOLIO_URL,
+    siteName: 'Avinash Reddy Portfolio',
+    title: 'Avinash Reddy | Senior Software Engineer',
+    description: 'Senior Flutter Engineer with 7+ years of experience. Expert in Clean Architecture, real-time mobile systems, payment integrations, and enterprise-grade applications.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Avinash Reddy - Senior Software Engineer' }],
   },
-  twitter: { card: 'summary_large_image', creator: '@AvinashK_Dev', images: ['/og-image.png'] },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Avinash Reddy | Senior Software Engineer',
+    description: 'Senior Flutter Engineer with 7+ years of experience architecting enterprise-grade mobile applications.',
+    images: ['/og-image.png'],
+  },
+  alternates: {
+    canonical: PORTFOLIO_URL,
+  },
+  verification: {
+    google: '',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-dark-950 text-white overflow-x-hidden`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
-        </ThemeProvider>
+    <html lang='en' className='scroll-smooth'>
+      <head>
+        <link rel='canonical' href={PORTFOLIO_URL} />
+        <meta name='theme-color' content='#0a0a0a' />
+      </head>
+      <body className={`${inter.variable} ${jetBrainsMono.variable} font-sans bg-[#0a0a0a] text-white antialiased`}>
+        {children}
       </body>
     </html>
   );
