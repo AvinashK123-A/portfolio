@@ -1,0 +1,52 @@
+{
+  "name": "avinash-reddy-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "analyze": "ANALYZE=true next build"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "framer-motion": "^11.3.19",
+    "gsap": "^3.12.5",
+    "@gsap/react": "^2.1.1",
+    "lottie-react": "^2.4.0",
+    "react-type-animation": "^3.2.0",
+    "react-intersection-observer": "^9.13.0",
+    "react-scroll": "^1.9.0",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.5.0",
+    "tsparticles": "^3.5.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.4.0",
+    "lucide-react": "^0.414.0",
+    "next-themes": "^0.3.0",
+    "@vercel/analytics": "^1.3.1",
+    "@vercel/speed-insights": "^1.0.12",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/node": "^20.14.15",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "tailwindcss": "^3.4.7",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.40",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
+    "prettier": "^3.3.3",
+    "@next/bundle-analyzer": "^14.2.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
