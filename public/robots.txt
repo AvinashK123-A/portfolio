@@ -1,0 +1,6 @@
+# robots.txt — Avinash Reddy K Portfolio
+User-agent: *
+Allow: /
+Sitemap: https://avinash-reddy.dev/sitemap.xml
+Disallow: /api/
+Disallow: /_next/
