@@ -1,65 +1,101 @@
 'use client';
-import { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Github, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { projects } from '@/data/portfolio';
-
-const cats = ['All','Mobile','FinTech','Security','Enterprise','Platform'];
+import { CTA_LINKS } from '@/config/profile';
 
 export default function ProjectsSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [active, setActive] = useState('All');
-
-  const filtered = active === 'All' ? projects : projects.filter(p => p.category === active);
-
   return (
-    <section id="projects" ref={ref} className="section-padding relative">
-      <div className="container-custom relative z-10">
-        <motion.div initial={{opacity:0,y:30}} animate={isInView?{opacity:1,y:0}:{}} transition={{duration:0.6}} className="text-center mb-12">
-          <span className="text-primary-400 text-sm font-mono tracking-widest uppercase mb-3 block">// projects</span>
-          <h2 className="section-title gradient-text">Featured Work</h2>
-          <p className="section-subtitle">Production-grade Flutter applications — real code, real architecture, real users.</p>
+    <section id='projects' className='py-24 px-6 bg-[#0a0a0a]'>
+      <div className='max-w-7xl mx-auto'>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className='text-center mb-16'
+        >
+          <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>
+            Featured <span className='text-violet-400'>Projects</span>
+          </h2>
+          <p className='text-gray-400 text-lg max-w-2xl mx-auto'>
+            Enterprise-grade Flutter applications built for scale, security, and performance
+          </p>
         </motion.div>
-        <motion.div initial={{opacity:0,y:20}} animate={isInView?{opacity:1,y:0}:{}} transition={{duration:0.6,delay:0.2}} className="flex flex-wrap justify-center gap-3 mb-12">
-          {cats.map(c=>(
-            <button key={c} onClick={()=>setActive(c)} className={'px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 '+(active===c?'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-glow-sm':'glass-card text-white/60 hover:text-white hover:bg-white/10')}>{c}</button>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mb-12'>
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -5 }}
+              className='p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/40 transition-all group'
+            >
+              <div className='flex items-start justify-between mb-4'>
+                <span className='text-4xl'>{project.emoji}</span>
+                <div className='flex gap-2'>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-all'
+                      title='View on GitHub'
+                    >
+                      <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24'>
+                        <path fillRule='evenodd' d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z' clipRule='evenodd' />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <h3 className='text-xl font-bold text-white mb-2 group-hover:text-violet-300 transition-colors'>
+                {project.title}
+              </h3>
+              <p className='text-gray-400 text-sm leading-relaxed mb-4'>
+                {project.description}
+              </p>
+
+              {/* Stats */}
+              <div className='flex flex-wrap gap-2 mb-4'>
+                {Object.entries(project.stats).map(([key, val]) => (
+                  <span key={key} className='px-2 py-1 bg-violet-500/10 border border-violet-500/20 rounded text-violet-300 text-xs'>
+                    {String(val)}
+                  </span>
+                ))}
+              </div>
+
+              {/* Tech Stack */}
+              <div className='flex flex-wrap gap-2'>
+                {project.tech.map((t) => (
+                  <span key={t} className='px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-300 text-xs'>
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           ))}
-        </motion.div>
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((p,i)=>(
-              <motion.div key={p.id} layout initial={{opacity:0,scale:0.9}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:0.9}} transition={{duration:0.4,delay:i*0.05}} whileHover={{y:-8}} className="group relative glass-card overflow-hidden">
-                <div className={'h-1 w-full bg-gradient-to-r '+p.color} />
-                <div className="p-6 pb-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="text-3xl">{p.emoji}</span>
-                    <span className={'text-xs px-2 py-1 rounded-full bg-gradient-to-r '+p.color+' text-white font-medium'}>{p.category}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{p.title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed line-clamp-3">{p.description}</p>
-                </div>
-                <div className="px-6 pb-4">
-                  <div className="flex gap-4">{Object.entries(p.stats).map(([k,v])=>(
-                    <div key={k} className="text-center"><div className="text-sm font-bold text-primary-300">{v}</div><div className="text-xs text-white/40 capitalize">{k}</div></div>
-                  ))}</div>
-                </div>
-                <div className="px-6 pb-4 flex flex-wrap gap-2">
-                  {p.tech.slice(0,4).map(t=><span key={t} className="text-xs px-2 py-1 rounded-md bg-white/5 text-white/60 border border-white/10">{t}</span>)}
-                  {p.tech.length>4&&<span className="text-xs px-2 py-1 rounded-md bg-white/5 text-white/40">+{p.tech.length-4}</span>}
-                </div>
-                <div className="px-6 pb-6 flex gap-3">
-                  <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-white/60 hover:text-white glass-card px-4 py-2 rounded-lg flex-1 justify-center transition-colors">
-                    <Github className="w-4 h-4" />View Code
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-        <motion.div initial={{opacity:0,y:30}} animate={isInView?{opacity:1,y:0}:{}} transition={{duration:0.6,delay:0.5}} className="text-center mt-14">
-          <a href="https://github.com/AvinashK123-A" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 btn-outline px-8 py-3 text-base">
-            <Github className="w-5 h-5" />View All on GitHub<ExternalLink className="w-4 h-4" />
+        </div>
+
+        {/* View All on GitHub CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className='text-center'
+        >
+          <a
+            href={CTA_LINKS.githubProfile}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='inline-flex items-center gap-2 px-8 py-4 border border-violet-500/40 text-violet-300 rounded-xl hover:bg-violet-500/10 hover:border-violet-400 transition-all font-semibold'
+          >
+            <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24'>
+              <path fillRule='evenodd' d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z' clipRule='evenodd' />
+            </svg>
+            View All Projects on GitHub
           </a>
         </motion.div>
       </div>
