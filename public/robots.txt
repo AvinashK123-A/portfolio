@@ -1,6 +1,7 @@
-# robots.txt — Avinash Reddy K Portfolio
 User-agent: *
 Allow: /
-Sitemap: https://avinash-reddy.dev/sitemap.xml
-Disallow: /api/
-Disallow: /_next/
+
+Sitemap: https://avinashk123-a-portfolio.vercel.app/sitemap.xml
+
+# Portfolio of Avinash Reddy - Senior Software Engineer
+# https://github.com/AvinashK123-A
