@@ -1,56 +1,114 @@
 'use client';
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { PROFILE, CTA_LINKS } from '@/config/profile';
 import { personalInfo } from '@/data/portfolio';
 
-const values = [
-  { title: 'Clean Architecture', description: 'Feature-first, SOLID, DDD — code that communicates its intent.', icon: '📐' },
-  { title: 'Production Quality', description: 'Every commit is production-ready. No mock data, no partial implementations.', icon: '🚀' },
-  { title: 'Continuous Learning', description: 'Active contributor to flutter/flutter, FlutterFire, and open-source packages.', icon: '📚' },
-  { title: 'Team Leadership', description: 'Code reviews, mentoring, setting standards, and lifting the team.', icon: '👥' },
-];
-
 export default function AboutSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const cv = { hidden:{opacity:0}, visible:{opacity:1,transition:{staggerChildren:0.1}} };
-  const iv = { hidden:{opacity:0,y:30}, visible:{opacity:1,y:0,transition:{duration:0.6}} };
   return (
-    <section id="about" ref={ref} className="section-padding relative">
-      <div className="container-custom relative z-10">
-        <motion.div initial={{opacity:0,y:30}} animate={isInView?{opacity:1,y:0}:{}} transition={{duration:0.6}} className="text-center mb-16">
-          <span className="text-primary-400 text-sm font-mono tracking-widest uppercase mb-3 block">// about me</span>
-          <h2 className="section-title gradient-text">Who I Am</h2>
-          <p className="section-subtitle">A passionate Flutter engineer who turns complex requirements into elegant mobile experiences.</p>
+    <section id='about' className='py-24 px-6 bg-[#0f0f0f]'>
+      <div className='max-w-7xl mx-auto'>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className='text-center mb-16'
+        >
+          <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>
+            About <span className='text-violet-400'>Me</span>
+          </h2>
+          <p className='text-gray-400 text-lg max-w-2xl mx-auto'>
+            Senior Flutter Engineer crafting enterprise-grade mobile experiences
+          </p>
         </motion.div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <motion.div variants={cv} initial="hidden" animate={isInView?'visible':'hidden'} className="space-y-8">
-            <motion.div variants={iv} className="glass-card p-6 flex gap-5 items-start">
-              <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-primary-500/40">
-                  <Image src="https://avatars.githubusercontent.com/AvinashK123-A" alt="Avinash Reddy K" width={80} height={80} className="object-cover" unoptimized />
+
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
+          {/* Left: Profile Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className='flex items-center gap-6 mb-8'>
+              <div className='w-24 h-24 rounded-full bg-gradient-to-br from-violet-600 to-blue-600 p-1 flex-shrink-0'>
+                <div className='w-full h-full rounded-full bg-[#0f0f0f] overflow-hidden'>
+                  <img
+                    src={PROFILE.profileImage}
+                    alt={PROFILE.profileImageAlt}
+                    className='w-full h-full object-cover rounded-full'
+                    onError={(e) => {
+                      const t = e.target as HTMLImageElement;
+                      t.style.display = 'none';
+                    }}
+                  />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-400 ring-2 ring-dark-950" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">{personalInfo.name}</h3>
-                <p className="text-primary-400 font-medium">{personalInfo.tagline}</p>
-                <p className="text-white/50 text-sm mt-1">{personalInfo.location}</p>
-                <p className="text-xs text-green-400 mt-2 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />{personalInfo.availability}</p>
+                <h3 className='text-2xl font-bold text-white'>{PROFILE.name}</h3>
+                <p className='text-violet-400 font-semibold'>{PROFILE.role}</p>
+                <p className='text-gray-400 text-sm'>{PROFILE.location} &bull; {PROFILE.yearsOfExperience}+ Years</p>
               </div>
-            </motion.div>
-            <motion.div variants={iv} className="space-y-4">
-              <p className="text-white/70 leading-relaxed">{personalInfo.description}</p>
-              <blockquote className="code-block p-4 rounded-xl text-white/60 italic border-l-2 border-primary-500">"{personalInfo.philosophy}"</blockquote>
-            </motion.div>
+            </div>
+
+            <p className='text-gray-300 text-lg leading-relaxed mb-6'>
+              {personalInfo.description}
+            </p>
+
+            <blockquote className='border-l-4 border-violet-500 pl-4 text-gray-400 italic mb-8'>
+              &ldquo;{PROFILE.philosophy}&rdquo;
+            </blockquote>
+
+            <div className='flex flex-wrap gap-4'>
+              <a
+                href={CTA_LINKS.githubProfile}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white hover:border-violet-400 transition-all'
+              >
+                GitHub Profile
+              </a>
+              <a
+                href={CTA_LINKS.linkedin}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white hover:border-blue-400 transition-all'
+              >
+                LinkedIn
+              </a>
+              <a
+                href={CTA_LINKS.downloadResume}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 rounded-xl text-white transition-all'
+              >
+                Download Resume
+              </a>
+            </div>
           </motion.div>
-          <motion.div variants={cv} initial="hidden" animate={isInView?'visible':'hidden'} className="space-y-6">
-            <motion.h3 variants={iv} className="text-2xl font-bold text-white">What Drives Me</motion.h3>
-            {values.map(v => (
-              <motion.div key={v.title} variants={iv} whileHover={{x:6}} className="glass-card-hover p-5 flex gap-4">
-                <span className="text-2xl flex-shrink-0">{v.icon}</span>
-                <div><h4 className="font-semibold text-white mb-1">{v.title}</h4><p className="text-white/60 text-sm">{v.description}</p></div>
+
+          {/* Right: Stats Cards */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className='grid grid-cols-2 gap-4'
+          >
+            {[
+              { value: '7+', label: 'Years Experience', icon: '🚀' },
+              { value: '20+', label: 'Apps Shipped', icon: '📱' },
+              { value: '100K+', label: 'Users Served', icon: '👥' },
+              { value: '99.9%', label: 'Uptime Achieved', icon: '⚡' },
+            ].map((stat) => (
+              <motion.div
+                key={stat.label}
+                whileHover={{ scale: 1.05 }}
+                className='p-6 bg-white/5 border border-white/10 rounded-2xl text-center hover:border-violet-500/50 transition-all'
+              >
+                <div className='text-3xl mb-2'>{stat.icon}</div>
+                <div className='text-3xl font-bold text-violet-400 mb-1'>{stat.value}</div>
+                <div className='text-gray-400 text-sm'>{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
