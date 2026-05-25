@@ -279,4 +279,4 @@ export default function AboutSection() {
               </div>
         </section>
       );
-}</section>
+}
