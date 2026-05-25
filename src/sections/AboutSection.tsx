@@ -37,7 +37,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
         requestAnimationFrame(step);
   }, [isInView, value]);
 
-  return <span ref={ref}>{displayed}{suffix}</span>span>;
+  return <span ref={ref}>{displayed}{suffix}</span>;
 }
 
 export default function AboutSection() {
@@ -75,7 +75,7 @@ export default function AboutSection() {
               <div className="absolute inset-0 pointer-events-none">
                       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/8 rounded-full blur-3xl" />
                       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent-500/6 rounded-full blur-3xl" />
-              </div>div>
+              </div>
         
               <div className="container-custom relative z-10">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
@@ -124,8 +124,8 @@ export default function AboutSection() {
                                                                                                                                           t.src = 'https://ui-avatars.com/api/?name=Avinash+Reddy&background=5667ff&color=fff&size=400';
                                                                                                                     }}
                                                                                                                 />
-                                                                          </div>div>
-                                                          </div>div>
+                                                                          </div>
+                                                          </div>
                                               {/* Floating badge */}
                                                           <motion.div
                                                                             className="absolute -bottom-4 -right-4 glass-card px-4 py-2 rounded-xl border border-green-400/30"
@@ -135,9 +135,9 @@ export default function AboutSection() {
                                                                           >
                                                                           <div className="flex items-center gap-2 text-sm">
                                                                                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                                                                                            <span className="text-green-400 font-medium">Available</span>span>
-                                                                          </div>div>
-                                                          </motion.div>motion.div>
+                                                                                            <span className="text-green-400 font-medium">Available</span>
+                                                                          </div>
+                                                          </motion.div>
                                               {/* Experience badge */}
                                                           <motion.div
                                                                             className="absolute -top-4 -left-4 glass-card px-4 py-2 rounded-xl border border-primary-500/30"
@@ -146,12 +146,12 @@ export default function AboutSection() {
                                                                             transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
                                                                           >
                                                                           <div className="text-center">
-                                                                                            <div className="text-primary-400 font-bold text-lg leading-none">7+</div>div>
-                                                                                            <div className="text-white/60 text-xs">Years</div>div>
-                                                                          </div>div>
-                                                          </motion.div>motion.div>
-                                            </motion.div>motion.div>
-                                </motion.div>motion.div>
+                                                                                            <div className="text-primary-400 font-bold text-lg leading-none">7+</div>
+                                                                                            <div className="text-white/60 text-xs">Years</div>
+                                                                          </div>
+                                                          </motion.div>
+                                            </motion.div>
+                                </motion.div>
                       
                         {/* RIGHT: Content */}
                                 <motion.div
@@ -168,8 +168,8 @@ export default function AboutSection() {
                                                             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary-500/30 bg-primary-500/10"
                                                           >
                                                           <span className="w-1.5 h-1.5 bg-primary-400 rounded-full" />
-                                                          <span className="text-primary-300 text-sm font-mono tracking-widest uppercase">About Me</span>span>
-                                            </motion.div>motion.div>
+                                                          <span className="text-primary-300 text-sm font-mono tracking-widest uppercase">About Me</span>
+                                            </motion.div>
                                 
                                   {/* Name */}
                                             <motion.div
@@ -179,8 +179,8 @@ export default function AboutSection() {
                                                           >
                                                           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-3">
                                                                           Avinash Reddy<br />
-                                                                          <span className="gradient-text">Kommareddy</span>span>
-                                                          </h2>h2>
+                                                                          <span className="gradient-text">Kommareddy</span>
+                                                          </h2>
                                               {/* Animated role switcher */}
                                                           <div className="h-9 overflow-hidden relative">
                                                             {roles.map((role, i) => (
@@ -195,10 +195,10 @@ export default function AboutSection() {
                                                                                                     transition={{ duration: 0.45, ease: 'easeInOut' }}
                                                                                                   >
                                                                                 {role}
-                                                                              </motion.p>motion.p>
+                                                                              </motion.p>
                                                                             ))}
-                                                          </div>div>
-                                            </motion.div>motion.div>
+                                                          </div>
+                                            </motion.div>
                                 
                                   {/* Description */}
                                             <motion.p
@@ -209,7 +209,7 @@ export default function AboutSection() {
                                                           >
                                                           7+ years of experience building enterprise-grade cross-platform applications across aviation, banking, marine operations, education and healthcare domains.
                                                           Specialized in Flutter architecture, scalable systems, real-time applications and leading engineering teams.
-                                            </motion.p>motion.p>
+                                            </motion.p>
                                 
                                   {/* Stats Grid */}
                                             <motion.div
@@ -228,17 +228,17 @@ export default function AboutSection() {
                                                                                                 whileHover={{ y: -4, boxShadow: '0 15px 40px rgba(86,103,255,0.2)' }}
                                                                                               >
                                                                                               <div className="flex items-center gap-3">
-                                                                                                                  <span className="text-2xl">{stat.icon}</span>span>
+                                                                                                                  <span className="text-2xl">{stat.icon}</span>
                                                                                                                   <div>
                                                                                                                                         <div className="text-2xl font-bold text-primary-400 leading-none">
                                                                                                                                                                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                                                                                                                                          </div>div>
-                                                                                                                                        <div className="text-white/50 text-xs mt-0.5">{stat.label}</div>div>
-                                                                                                                    </div>div>
-                                                                                                </div>div>
-                                                                            </motion.div>motion.div>
+                                                                                                                                          </div>
+                                                                                                                                        <div className="text-white/50 text-xs mt-0.5">{stat.label}</div>
+                                                                                                                    </div>
+                                                                                                </div>
+                                                                            </motion.div>
                                                                           ))}
-                                            </motion.div>motion.div>
+                                            </motion.div>
                                 
                                   {/* CTA Buttons */}
                                             <motion.div
@@ -254,7 +254,7 @@ export default function AboutSection() {
                                                                             className="btn-outline text-sm px-6 py-2.5"
                                                                           >
                                                                           GitHub Profile
-                                                          </a>a>
+                                                          </a>
                                                           <a
                                                                             href={CTA_LINKS.linkedin}
                                                                             target="_blank"
@@ -262,7 +262,7 @@ export default function AboutSection() {
                                                                             className="btn-outline text-sm px-6 py-2.5"
                                                                           >
                                                                           LinkedIn
-                                                          </a>a>
+                                                          </a>
                                                           <a
                                                                             href="/resume/Avinash_Reddy_Resume.pdf"
                                                                             download="Avinash_Reddy_Resume.pdf"
@@ -270,13 +270,13 @@ export default function AboutSection() {
                                                                           >
                                                                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                                          </svg>svg>
+                                                                          </svg>
                                                                           Download Resume
-                                                          </a>a>
-                                            </motion.div>motion.div>
-                                </motion.div>motion.div>
-                      </div>div>
-              </div>div>
-        </section>section>
+                                                          </a>
+                                            </motion.div>
+                                </motion.div>
+                      </div>
+              </div>
+        </section>
       );
 }</section>
