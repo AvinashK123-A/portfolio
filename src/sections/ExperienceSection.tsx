@@ -109,8 +109,8 @@ function TimelineCard({ entry, index, isInView }: { entry: typeof careerData[0];
                                                                   transition={{ duration: 1.5, repeat: Infinity }}
                                                                 />
                                                 )}
-                          </motion.div>motion.div>
-                  </div>div>
+                          </motion.div>
+                  </div>
           
             {/* Card */}
                 <motion.div
@@ -127,29 +127,29 @@ function TimelineCard({ entry, index, isInView }: { entry: typeof careerData[0];
                           {/* Header */}
                                   <div className="flex items-start justify-between gap-3 mb-4">
                                               <div>
-                                                            <h3 className="text-lg font-bold text-white mb-1">{entry.title}</h3>h3>
-                                                            <p className="font-semibold" style={{ color: entry.color }}>{entry.company}</p>p>
-                                                            <p className="text-white/40 text-xs mt-0.5">{entry.fullCompany}</p>p>
-                                              </div>div>
+                                                            <h3 className="text-lg font-bold text-white mb-1">{entry.title}</h3>
+                                                            <p className="font-semibold" style={{ color: entry.color }}>{entry.company}</p>
+                                                            <p className="text-white/40 text-xs mt-0.5">{entry.fullCompany}</p>
+                                              </div>
                                     {entry.current && (
                                                   <span className="flex-shrink-0 text-xs px-3 py-1 rounded-full bg-green-400/15 text-green-400 border border-green-400/30 whitespace-nowrap">
                                                                   Current
-                                                  </span>span>
+                                                  </span>
                                               )}
-                                  </div>div>
+                                  </div>
                         
                           {/* Meta */}
                                   <div className="flex flex-wrap gap-3 text-xs text-white/50 mb-4">
                                               <span className="flex items-center gap-1.5">
                                                             <Calendar className="w-3.5 h-3.5" />{entry.period}
-                                              </span>span>
+                                              </span>
                                               <span className="flex items-center gap-1.5">
                                                             <MapPin className="w-3.5 h-3.5" />{entry.location}
-                                              </span>span>
-                                  </div>div>
+                                              </span>
+                                  </div>
                         
                           {/* Description */}
-                                  <p className="text-white/65 text-sm leading-relaxed mb-4">{entry.description}</p>p>
+                                  <p className="text-white/65 text-sm leading-relaxed mb-4">{entry.description}</p>
                         
                           {/* Tags */}
                                   <div className="flex flex-wrap gap-1.5">
@@ -164,12 +164,12 @@ function TimelineCard({ entry, index, isInView }: { entry: typeof careerData[0];
                                                                     }}
                                                                   >
                                                     {tag}
-                                                  </span>span>
+                                                  </span>
                                                 ))}
-                                  </div>div>
-                        </div>div>
-                </motion.div>motion.div>
-          </div>div>
+                                  </div>
+                        </div>
+                </motion.div>
+          </div>
         );
 }
 
@@ -185,7 +185,7 @@ export default function ExperienceSection() {
                 <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl" />
                         <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-accent-500/5 rounded-full blur-3xl" />
-                </div>div>
+                </div>
           
                 <div className="container-custom relative z-10">
                   {/* Section header */}
@@ -197,12 +197,12 @@ export default function ExperienceSection() {
                                   >
                                   <span className="text-primary-400 text-sm font-mono tracking-widest uppercase mb-3 block">
                                               // career journey
-                                  </span>span>
-                                  <h2 className="section-title gradient-text">Career Journey</h2>h2>
+                                  </span>
+                                  <h2 className="section-title gradient-text">Career Journey</h2>
                                   <p className="section-subtitle">
                                               7+ years building, shipping and leading Flutter applications at enterprise scale.
-                                  </p>p>
-                        </motion.div>motion.div>
+                                  </p>
+                        </motion.div>
                 
                   {/* Timeline */}
                         <div className="relative max-w-5xl mx-auto">
@@ -220,8 +220,8 @@ export default function ExperienceSection() {
                           {careerData.map((entry, index) => (
                         <TimelineCard key={entry.id} entry={entry} index={index} isInView={isInView} />
                       ))}
-                        </div>div>
-                </div>div>
-          </section>section>
+                        </div>
+                </div>
+          </section>
         );
 }</div>
