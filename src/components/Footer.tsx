@@ -94,9 +94,6 @@ export default function Footer() {
           <p className='text-gray-500 text-sm'>
             &copy; {currentYear} {PROFILE.fullName}. All rights reserved.
           </p>
-          <p className='text-gray-600 text-xs'>
-            Built with Next.js 14, TypeScript & Tailwind CSS
-          </p>
         </div>
       </div>
     </footer>
