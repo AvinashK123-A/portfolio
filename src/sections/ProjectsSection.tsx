@@ -33,7 +33,7 @@ export default function ProjectsSection() {
               className='p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/40 transition-all group'
             >
               <div className='flex items-start justify-between mb-4'>
-                <span className='text-4xl'>{project.emoji}</span>
+                <span className='text-4xl'>🚀</span>
                 <div className='flex gap-2'>
                   {project.github && (
                     <a
@@ -60,11 +60,7 @@ export default function ProjectsSection() {
 
               {/* Stats */}
               <div className='flex flex-wrap gap-2 mb-4'>
-                {Object.entries(project.stats).map(([key, val]) => (
-                  <span key={key} className='px-2 py-1 bg-violet-500/10 border border-violet-500/20 rounded text-violet-300 text-xs'>
-                    {String(val)}
-                  </span>
-                ))}
+                
               </div>
 
               {/* Tech Stack */}
