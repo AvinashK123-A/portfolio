@@ -1,50 +1,75 @@
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import type { ReactNode } from 'react';
 import './globals.css';
 import MouseGlowEffect from '@/components/MouseGlowEffect';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const jetBrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
-
-const PORTFOLIO_URL = 'https://portfolio-xi-three-4uo4n9c.netlify.app';
+import MotionProvider from '@/components/MotionProvider';
+import { profile } from '@/data/portfolio';
+import { inter, jetBrainsMono } from './fonts';
 
 export const metadata: Metadata = {
-      metadataBase: new URL(PORTFOLIO_URL),
-      title: {
-          default: 'Avinash Reddy Kommareddy | Senior Flutter Engineer',
-              template: '%s | Avinash Reddy Kommareddy',
-      },
-      description: 'Senior Flutter Engineer with 7+ years of experience building enterprise-grade cross-platform applications.',
-      keywords: ['Avinash Reddy Kommareddy', 'Flutter Developer', 'Senior Flutter Engineer'],
-      authors: [{ name: 'Avinash Reddy Kommareddy', url: PORTFOLIO_URL }],
-      creator: 'Avinash Reddy Kommareddy',
-      robots: { index: true, follow: true },
-      openGraph: {
-              type: 'website',
-              locale: 'en_US',
-              url: PORTFOLIO_URL,
-              title: 'Avinash Reddy Kommareddy | Senior Flutter Engineer',
-              description: 'Senior Flutter Engineer with 7+ years of experience.',
-              images: [{ url: '/og-image.png', width: 1200, height: 630 }],
-      },
-      twitter: {
-              card: 'summary_large_image',
-              title: 'Avinash Reddy Kommareddy | Senior Flutter Engineer',
-              images: ['/og-image.png'],
-      },
-      alternates: { canonical: PORTFOLIO_URL },
+  metadataBase: new URL(profile.siteUrl),
+  title: {
+    default: profile.seo.title,
+    template: `%s | ${profile.fullName}`,
+  },
+  description: profile.seo.description,
+  keywords: [...profile.seo.keywords],
+  authors: [{ name: profile.fullName, url: profile.siteUrl }],
+  creator: profile.fullName,
+  robots: { index: true, follow: true },
+  // og:image / twitter:image come from app/opengraph-image.tsx automatically.
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: profile.siteUrl,
+    siteName: profile.fullName,
+    title: profile.seo.title,
+    description: profile.seo.description,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: profile.seo.title,
+    description: profile.seo.description,
+  },
+  alternates: { canonical: '/' },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-      return (
-              <html lang="en" className="scroll-smooth">
-                    <head>
-                            <meta name="theme-color" content="#0a0a0a" />
-                    </head>
-                        <body className={`${inter.variable} ${jetBrainsMono.variable} font-sans bg-[#0a0a0a] text-white antialiased`}>
-                                    <MouseGlowEffect />
-                            {children}
-                        </body>
-              </html>
-            );
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
+  colorScheme: 'dark',
+};
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.fullName,
+  jobTitle: profile.role,
+  url: profile.siteUrl,
+  image: profile.avatarUrl,
+  email: `mailto:${profile.email}`,
+  address: { '@type': 'PostalAddress', addressLocality: profile.location },
+  sameAs: [profile.github, profile.linkedin],
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable} scroll-smooth`}>
+      <body className="font-sans bg-[#0a0a0a] text-white antialiased">
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <script
+          type="application/ld+json"
+          // Static, trusted data from src/data/portfolio.ts; `<` is escaped defensively.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c'),
+          }}
+        />
+        <MotionProvider>
+          <MouseGlowEffect />
+          {children}
+        </MotionProvider>
+      </body>
+    </html>
+  );
 }
