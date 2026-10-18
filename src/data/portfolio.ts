@@ -1,7 +1,7 @@
 // ============================================================
 // SINGLE SOURCE OF TRUTH FOR SITE CONTENT
-// Every section, the page metadata, the Open Graph image, robots.txt
-// and sitemap.xml read from this file. Edit content here only.
+// Every section, the page metadata and the Open Graph image read from
+// this file. Edit content here only. The site URL lives in ./site.ts.
 // ============================================================
 
 export interface Profile {
@@ -18,14 +18,11 @@ export interface Profile {
   location: string;
   yearsOfExperience: number;
   availability: string;
+  /** Public contact address, shown in the Contact section and the footer. */
   email: string;
-  /** Kept for reference; not rendered anywhere on the site. */
-  phone: string;
   githubUsername: string;
   github: string;
   linkedin: string;
-  /** Canonical production URL (no trailing slash). */
-  siteUrl: string;
   /**
    * Resume link. Leave `null` to hide every resume button.
    * To publish one, put the PDF in `public/resume/` and set e.g.
@@ -60,11 +57,9 @@ export const profile: Profile = {
   yearsOfExperience: YEARS,
   availability: 'Open to Senior / Lead / Architect roles',
   email: 'avinash.kommareddybe@gmail.com',
-  phone: '+91 7358489100',
   githubUsername: 'AvinashK123-A',
   github: 'https://github.com/AvinashK123-A',
   linkedin: 'https://www.linkedin.com/in/avinash-reddy-0826b0222/',
-  siteUrl: 'https://portfolio-xi-three-4uo4n9c.netlify.app',
   resumeUrl: null,
   avatarUrl: 'https://github.com/AvinashK123-A.png?size=640',
   avatarAlt: 'Portrait of Avinash Reddy Kommareddy',
