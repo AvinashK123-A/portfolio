@@ -1,5 +1,5 @@
 /** Production URL on Vercel. Used whenever NEXT_PUBLIC_SITE_URL is not set. */
-export const DEFAULT_SITE_URL = 'https://portfolio-avinash-reddy-s-projects1.vercel.app';
+export const DEFAULT_SITE_URL = 'https://portfolio-xi-three-4uo4n9ctro.vercel.app';
 
 /**
  * Normalises a site URL to its origin (`https://example.com`, no trailing slash).
