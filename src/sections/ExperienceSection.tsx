@@ -1,23 +1,13 @@
-'use client';
-import { useRef } from 'react';
-import { m, useInView, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Calendar, MapPin } from 'lucide-react';
 import { experience, profile, type Experience } from '@/data/portfolio';
+import TimelineProgress from '@/components/TimelineProgress';
+import { reveal, revealGroup } from '@/components/reveal';
 
 const ACCENTS = ['#7b96ff', '#ec5ef8'] as const;
 
-function TimelineCard({
-  entry,
-  index,
-  isInView,
-}: {
-  entry: Experience;
-  index: number;
-  isInView: boolean;
-}) {
+function TimelineCard({ entry, index }: { entry: Experience; index: number }) {
   const isLeft = index % 2 === 0;
   const color = ACCENTS[index % ACCENTS.length];
-  const reduceMotion = useReducedMotion();
 
   return (
     <li
@@ -25,35 +15,31 @@ function TimelineCard({
     >
       {/* Timeline dot */}
       <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10 mt-5" aria-hidden="true">
-        <m.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={isInView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ delay: 0.2 + index * 0.12, type: 'spring', stiffness: 200 }}
+        <div
+          {...reveal(
+            'pop',
+            { delay: 0.2 + index * 0.12, duration: 0.5 },
+            {
+              borderColor: color,
+              background: '#0a0b14',
+              boxShadow: `0 0 0 4px ${color}30, 0 0 15px ${color}50`,
+            },
+          )}
           className="w-5 h-5 rounded-full border-2 flex items-center justify-center"
-          style={{
-            borderColor: color,
-            background: '#0a0b14',
-            boxShadow: `0 0 0 4px ${color}30, 0 0 15px ${color}50`,
-          }}
         >
           {entry.current && (
-            <m.div
-              className="w-2 h-2 rounded-full"
+            <div
+              className="w-2 h-2 rounded-full animate-pulse-dot motion-reduce:animate-none"
               style={{ background: color }}
-              animate={reduceMotion ? undefined : { scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
             />
           )}
-        </m.div>
+        </div>
       </div>
 
       {/* Card */}
-      <m.article
-        className={`w-full md:w-[45%] ml-14 md:ml-0 ${isLeft ? 'md:mr-auto md:pr-10' : 'md:ml-auto md:pl-10'}`}
-        initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
-        animate={isInView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.15 + index * 0.12, ease: 'easeOut' }}
-        whileHover={{ y: -5 }}
+      <article
+        className={`w-full md:w-[45%] ml-14 md:ml-0 ${isLeft ? 'md:mr-auto md:pr-10' : 'md:ml-auto md:pl-10'} transition-transform duration-300 motion-safe:hover:-translate-y-[5px]`}
+        {...reveal(isLeft ? 'left' : 'right', { delay: 0.15 + index * 0.12 })}
       >
         <div
           className="glass-card p-6 rounded-2xl border border-white/10 hover:border-white/25 transition-all duration-300 group"
@@ -69,7 +55,7 @@ function TimelineCard({
               <p className="text-white/60 text-xs mt-0.5">{entry.fullCompany}</p>
             </div>
             {entry.current && (
-              <span className="flex-shrink-0 text-xs px-3 py-1 rounded-full bg-green-400/15 text-green-400 border border-green-400/30 whitespace-nowrap">
+              <span className="shrink-0 text-xs px-3 py-1 rounded-full bg-green-400/15 text-green-400 border border-green-400/30 whitespace-nowrap">
                 Current
               </span>
             )}
@@ -107,26 +93,18 @@ function TimelineCard({
             ))}
           </ul>
         </div>
-      </m.article>
+      </article>
     </li>
   );
 }
 
 export default function ExperienceSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-  const lineHeight = useTransform(scrollYProgress, [0, 0.9], ['0%', '100%']);
-
   return (
     <section
       id="experience"
-      ref={sectionRef}
       aria-labelledby="experience-heading"
       className="section-padding relative bg-[#0a0a0a] overflow-hidden"
+      {...revealGroup}
     >
       {/* Background glows */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -136,12 +114,7 @@ export default function ExperienceSection() {
 
       <div className="container-custom relative z-10">
         {/* Section header */}
-        <m.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="text-center mb-20" {...reveal('up')}>
           <p
             className="text-primary-300 text-sm font-mono tracking-widest uppercase mb-3"
             aria-hidden="true"
@@ -155,27 +128,23 @@ export default function ExperienceSection() {
             {profile.yearsOfExperience}+ years building, shipping and leading Flutter applications
             at enterprise scale.
           </p>
-        </m.div>
+        </div>
 
         {/* Timeline */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Animated vertical line */}
           <div
             className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2"
             aria-hidden="true"
           />
-          <m.div
-            aria-hidden="true"
+          {/* Scroll-linked progress line */}
+          <TimelineProgress
             className="absolute left-6 md:left-1/2 top-0 w-px -translate-x-1/2 origin-top"
-            style={{
-              height: lineHeight,
-              background: 'linear-gradient(180deg, #5667ff, #d926ec, #5667ff)',
-            }}
+            style={{ background: 'linear-gradient(180deg, #5667ff, #d926ec, #5667ff)' }}
           />
 
           <ol className="relative">
             {experience.map((entry, index) => (
-              <TimelineCard key={entry.id} entry={entry} index={index} isInView={isInView} />
+              <TimelineCard key={entry.id} entry={entry} index={index} />
             ))}
           </ol>
         </div>

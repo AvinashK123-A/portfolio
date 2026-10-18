@@ -1,8 +1,7 @@
-'use client';
-import { m } from 'framer-motion';
 import { profile, projects, type Project } from '@/data/portfolio';
 import ExternalLink from '@/components/ExternalLink';
 import { GitHubIcon, PackageIcon } from '@/components/icons';
+import { reveal } from '@/components/reveal';
 
 const featured = projects.filter((p) => p.featured);
 const openSource = projects.filter((p) => p.kind === 'open-source' && !p.featured);
@@ -14,7 +13,7 @@ function TechList({ tech }: { tech: readonly string[] }) {
       {tech.map((t) => (
         <li
           key={t}
-          className="px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-300 text-xs"
+          className="px-2 py-1 bg-white/5 border border-white/10 rounded-sm text-gray-300 text-xs"
         >
           {t}
         </li>
@@ -53,13 +52,9 @@ function ProjectLinks({ project }: { project: Project }) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <m.article
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.08 }}
-      whileHover={{ y: -5 }}
-      className="flex flex-col gap-4 p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/40 transition-all group"
+    <article
+      {...reveal('up', { delay: index * 0.08 })}
+      className="flex flex-col gap-4 p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/40 transition-all motion-safe:hover:-translate-y-[5px] group"
     >
       <div>
         <p className="text-xs font-mono uppercase tracking-widest text-violet-300 mb-2">
@@ -74,18 +69,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <TechList tech={project.tech} />
         <ProjectLinks project={project} />
       </div>
-    </m.article>
+    </article>
   );
 }
 
 function FeaturedProject({ project }: { project: Project }) {
   return (
-    <m.article
+    <article
       data-testid="featured-project"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="relative p-8 rounded-3xl border border-violet-500/40 bg-gradient-to-br from-violet-500/10 via-white/5 to-blue-500/10 mb-12"
+      {...reveal('up')}
+      className="relative p-8 rounded-3xl border border-violet-500/40 bg-linear-to-br/srgb from-violet-500/10 via-white/5 to-blue-500/10 mb-12"
     >
       <p className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-violet-200 mb-3">
         <span className="w-1.5 h-1.5 rounded-full bg-violet-300" aria-hidden="true" />
@@ -97,7 +90,7 @@ function FeaturedProject({ project }: { project: Project }) {
         <TechList tech={project.tech} />
         <ProjectLinks project={project} />
       </div>
-    </m.article>
+    </article>
   );
 }
 
@@ -105,19 +98,14 @@ export default function ProjectsSection() {
   return (
     <section id="projects" aria-labelledby="projects-heading" className="py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto">
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div {...reveal('up')} className="text-center mb-16">
           <h2 id="projects-heading" className="text-4xl md:text-5xl font-bold text-white mb-4">
             Featured <span className="text-violet-400">Projects</span>
           </h2>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             Open-source Flutter work with public code, plus selected client and employer projects.
           </p>
-        </m.div>
+        </div>
 
         {featured.map((project) => (
           <FeaturedProject key={project.id} project={project} />

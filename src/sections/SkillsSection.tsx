@@ -1,9 +1,8 @@
-'use client';
-import { useRef } from 'react';
-import { m, useInView } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { profile, skillCategories, tools, type Skill } from '@/data/portfolio';
+import { reveal, revealGroup } from '@/components/reveal';
 
-function SkillBar({ skill, index, isInView }: { skill: Skill; index: number; isInView: boolean }) {
+function SkillBar({ skill, index }: { skill: Skill; index: number }) {
   const { name, level, color } = skill;
   return (
     <li className="space-y-2">
@@ -19,16 +18,15 @@ function SkillBar({ skill, index, isInView }: { skill: Skill; index: number; isI
         aria-valuemax={100}
         aria-valuenow={level}
       >
-        <m.div
+        <div
           className="h-full rounded-full"
-          style={{
+          {...reveal('bar', { delay: index * 0.05 + 0.2, duration: 1 }, {
+            // The bar's width comes from --level (see the 'bar' reveal in globals.css).
+            '--level': `${level}%`,
             background: color
               ? `linear-gradient(90deg, ${color}80, ${color})`
               : 'linear-gradient(90deg, #5667ff, #d926ec)',
-          }}
-          initial={{ width: 0 }}
-          animate={isInView ? { width: `${level}%` } : { width: 0 }}
-          transition={{ duration: 1, delay: index * 0.05 + 0.2, ease: 'easeOut' }}
+          } as CSSProperties)}
         />
       </div>
     </li>
@@ -36,23 +34,15 @@ function SkillBar({ skill, index, isInView }: { skill: Skill; index: number; isI
 }
 
 export default function SkillsSection() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
   return (
     <section
       id="skills"
-      ref={ref}
       aria-labelledby="skills-heading"
       className="section-padding relative"
+      {...revealGroup}
     >
       <div className="container-custom relative z-10">
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <div {...reveal('up')} className="text-center mb-16">
           <p
             className="text-primary-300 text-sm font-mono tracking-widest uppercase mb-3"
             aria-hidden="true"
@@ -66,14 +56,12 @@ export default function SkillsSection() {
             {profile.yearsOfExperience}+ years of deep expertise across the Flutter &amp; mobile
             development ecosystem.
           </p>
-        </m.div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {skillCategories.map((category, ci) => (
-            <m.div
+            <div
               key={category.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: ci * 0.1 }}
+              {...reveal('up', { delay: ci * 0.1 })}
               className="glass-card p-6 space-y-4"
             >
               <h3 className="font-semibold text-white text-base">
@@ -82,36 +70,28 @@ export default function SkillsSection() {
               </h3>
               <ul className="space-y-3">
                 {category.skills.map((skill, i) => (
-                  <SkillBar key={skill.name} skill={skill} index={i} isInView={isInView} />
+                  <SkillBar key={skill.name} skill={skill} index={i} />
                 ))}
               </ul>
-            </m.div>
+            </div>
           ))}
-          <m.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="glass-card p-6 space-y-4"
-          >
+          <div {...reveal('up', { delay: 0.5 })} className="glass-card p-6 space-y-4">
             <h3 className="font-semibold text-white text-base">
               <span aria-hidden="true">🛠️ </span>
               Tools &amp; Platforms
             </h3>
             <ul className="flex flex-wrap gap-2">
               {tools.map((tool, i) => (
-                <m.li
+                <li
                   key={tool}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.3, delay: i * 0.03 + 0.5 }}
-                  className="skill-badge"
-                  whileHover={{ scale: 1.05 }}
+                  {...reveal('scale', { delay: i * 0.03 + 0.5, duration: 0.3 })}
+                  className="skill-badge motion-safe:hover:scale-105"
                 >
                   {tool}
-                </m.li>
+                </li>
               ))}
             </ul>
-          </m.div>
+          </div>
         </div>
       </div>
     </section>

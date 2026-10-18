@@ -1,23 +1,17 @@
-'use client';
-import { m } from 'framer-motion';
 import { profile } from '@/data/portfolio';
+import ExternalLink from '@/components/ExternalLink';
+import { reveal } from '@/components/reveal';
 
 const cardClass =
-  'block p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/50 transition-all';
-
-const newTab = { target: '_blank', rel: 'noopener noreferrer' } as const;
-const newTabHint = <span className="sr-only"> (opens in a new tab)</span>;
+  'block p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-violet-500/50 transition-all motion-safe:hover:scale-105';
+const buttonClass =
+  'px-10 py-4 rounded-xl font-semibold transition-all motion-safe:hover:scale-105';
 
 export default function ContactSection() {
   return (
     <section id="contact" aria-labelledby="contact-heading" className="py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-4xl mx-auto text-center">
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div {...reveal('up')}>
           <h2 id="contact-heading" className="text-4xl md:text-5xl font-bold text-white mb-4">
             Get In <span className="text-violet-400">Touch</span>
           </h2>
@@ -28,89 +22,65 @@ export default function ContactSection() {
           {/* Contact Cards */}
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <li>
-              <m.a
-                href={`mailto:${profile.email}`}
-                whileHover={{ scale: 1.05 }}
-                className={cardClass}
-              >
+              <a href={`mailto:${profile.email}`} className={cardClass}>
                 <span className="block text-3xl mb-3" aria-hidden="true">
                   📧
                 </span>
                 <h3 className="text-white font-semibold mb-1">Email</h3>
                 <p className="text-violet-300 text-sm break-all">{profile.email}</p>
-              </m.a>
+              </a>
             </li>
             <li>
-              <m.a
-                href={profile.github}
-                {...newTab}
-                whileHover={{ scale: 1.05 }}
-                className={cardClass}
-              >
+              <ExternalLink href={profile.github} className={cardClass}>
                 <span className="block text-3xl mb-3" aria-hidden="true">
                   💻
                 </span>
                 <h3 className="text-white font-semibold mb-1">GitHub</h3>
                 <p className="text-violet-300 text-sm">@{profile.githubUsername}</p>
-                {newTabHint}
-              </m.a>
+              </ExternalLink>
             </li>
             <li>
-              <m.a
-                href={profile.linkedin}
-                {...newTab}
-                whileHover={{ scale: 1.05 }}
-                className={cardClass}
-              >
+              <ExternalLink href={profile.linkedin} className={cardClass}>
                 <span className="block text-3xl mb-3" aria-hidden="true">
                   🔗
                 </span>
                 <h3 className="text-white font-semibold mb-1">LinkedIn</h3>
                 <p className="text-violet-300 text-sm">{profile.name}</p>
-                {newTabHint}
-              </m.a>
+              </ExternalLink>
             </li>
           </ul>
 
           {/* Main CTA Buttons */}
           <div className="flex flex-wrap justify-center gap-4">
-            <m.a
+            <a
               href={`mailto:${profile.email}`}
-              whileHover={{ scale: 1.05 }}
-              className="px-10 py-4 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-semibold transition-all"
+              className={`${buttonClass} bg-violet-600 hover:bg-violet-700 text-white`}
             >
               Send Email
-            </m.a>
-            <m.a
+            </a>
+            <ExternalLink
               href={profile.linkedin}
-              {...newTab}
-              whileHover={{ scale: 1.05 }}
-              className="px-10 py-4 border border-blue-500 text-blue-300 rounded-xl font-semibold hover:bg-blue-500/10 transition-all"
+              className={`${buttonClass} border border-blue-500 text-blue-300 hover:bg-blue-500/10`}
             >
               Connect on LinkedIn
-              {newTabHint}
-            </m.a>
+            </ExternalLink>
             {profile.resumeUrl && (
-              <m.a
+              <a
                 href={profile.resumeUrl}
                 download
-                whileHover={{ scale: 1.05 }}
-                className="px-10 py-4 border border-green-500 text-green-300 rounded-xl font-semibold hover:bg-green-500/10 transition-all"
+                className={`${buttonClass} border border-green-500 text-green-300 hover:bg-green-500/10`}
               >
                 Download Resume
-              </m.a>
+              </a>
             )}
-            <m.a
+            <ExternalLink
               href={profile.github}
-              {...newTab}
-              whileHover={{ scale: 1.05 }}
-              className="px-10 py-4 border border-white/20 text-white rounded-xl font-semibold hover:bg-white/5 transition-all"
+              className={`${buttonClass} border border-white/20 text-white hover:bg-white/5`}
             >
               View GitHub
-              {newTabHint}
-            </m.a>
+            </ExternalLink>
           </div>
-        </m.div>
+        </div>
       </div>
     </section>
   );
