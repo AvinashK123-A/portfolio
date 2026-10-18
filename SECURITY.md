@@ -1,7 +1,7 @@
 # Security policy
 
 This repository is the source of a static personal portfolio site
-(<https://portfolio-avinash-reddy-s-projects1.vercel.app>). Only the current `main` branch and
+(<https://portfolio-xi-three-4uo4n9ctro.vercel.app>). Only the current `main` branch and
 the production deployment built from it are maintained.
 
 ## Reporting a vulnerability

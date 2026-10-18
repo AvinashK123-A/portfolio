@@ -7,7 +7,7 @@ Personal portfolio site of Avinash Reddy Kommareddy, Senior Flutter Engineer. It
 statically generated page with About, Skills, Experience, Projects and Contact sections, hosted
 on Vercel.
 
-**Live site:** <https://portfolio-avinash-reddy-s-projects1.vercel.app>
+**Live site:** <https://portfolio-xi-three-4uo4n9ctro.vercel.app>
 
 ## Stack
 
@@ -113,7 +113,7 @@ Production build: `npm run build`, then `npm run start`.
 Canonical URL, `metadataBase`, Open Graph and Twitter URLs, `robots.txt`, `sitemap.xml` and the
 JSON-LD all come from one constant, `siteUrl` in [`src/data/site.ts`](src/data/site.ts). It is
 read from `NEXT_PUBLIC_SITE_URL` at build time and defaults to
-`https://portfolio-avinash-reddy-s-projects1.vercel.app`. The value is reduced to its origin, and
+`https://portfolio-xi-three-4uo4n9ctro.vercel.app`. The value is reduced to its origin, and
 anything that is not an `http(s)` URL fails the build.
 
 To move to a custom domain:
