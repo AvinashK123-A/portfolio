@@ -3,8 +3,8 @@ import { expect, test, type ConsoleMessage, type Page } from '@playwright/test';
 
 const SECTION_IDS = ['about', 'skills', 'experience', 'projects', 'contact'];
 
-/** Scrolls through the page so every whileInView animation has run, then checks nothing is left hidden. */
-async function revealAll(page: Page) {
+/** Scrolls through the whole page so every scroll-triggered animation runs. */
+async function scrollThrough(page: Page) {
   await page.evaluate(async () => {
     // `instant` overrides the page's smooth scrolling, which would otherwise
     // cancel each step before it reaches the next section.
@@ -16,6 +16,11 @@ async function revealAll(page: Page) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   });
   await page.waitForTimeout(1500);
+}
+
+/** Scrolls through the page, then checks no content is left hidden by an entrance animation. */
+async function revealAll(page: Page) {
+  await scrollThrough(page);
   // Only the decorative, aria-hidden role switcher may still contain opacity-0 text.
   const stillHidden = await page
     .locator('main *')
@@ -167,6 +172,31 @@ test.describe('home page', () => {
     );
   });
 
+  test('shows the email address only in the Contact section and footer', async ({ page }) => {
+    await page.goto('/');
+    const mailto = page.locator('a[href^="mailto:"]');
+    expect(await mailto.count()).toBeGreaterThan(0);
+    const outside = await page.evaluate(() => {
+      const allowed = (node: Node | null) =>
+        !!(node instanceof Element ? node : node?.parentElement)?.closest('#contact, footer');
+      const misplaced: string[] = [];
+      document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
+        if (!allowed(a)) misplaced.push(a.outerHTML);
+      });
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        if (n.parentElement?.closest('script')) continue;
+        if (/@[a-z0-9-]+\.[a-z]{2,}/i.test(n.textContent ?? '') && !allowed(n)) {
+          misplaced.push(n.textContent!.trim());
+        }
+      }
+      return misplaced;
+    });
+    expect(outside).toEqual([]);
+    // No phone number in the delivered HTML, visible or not.
+    expect(await page.content()).not.toMatch(/tel:|\+91[\s-]?\d/);
+  });
+
   test('external links open safely in a new tab', async ({ page }) => {
     await page.goto('/');
     const external = await page.locator('a[href^="http"]').evaluateAll((links) =>
@@ -204,6 +234,51 @@ test.describe('home page', () => {
   });
 });
 
+test.describe('scroll animations', () => {
+  test('reveal content as it scrolls into view', async ({ page }) => {
+    await page.goto('/');
+    const contact = page.locator('#contact [data-reveal]').first();
+    await expect(contact).not.toHaveAttribute('data-revealed');
+    await expect(contact).toHaveCSS('opacity', '0');
+    await page.locator('#contact').scrollIntoViewIfNeeded();
+    await expect(contact).toHaveAttribute('data-revealed', '');
+    await expect(contact).toHaveCSS('opacity', '1');
+  });
+
+  test('skill bars grow to their level', async ({ page }) => {
+    await page.goto('/');
+    const bar = page.locator('#skills [data-reveal="bar"]').first();
+    await page.locator('#skills').scrollIntoViewIfNeeded();
+    await expect(bar).toHaveAttribute('data-revealed', '');
+    await expect
+      .poll(() => bar.evaluate((el) => el.clientWidth / el.parentElement!.clientWidth))
+      .toBeCloseTo(0.98, 2);
+  });
+});
+
+test.describe('without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('all content is visible', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('h1')).toContainText('Avinash Reddy');
+    const hidden = await page
+      .locator('main *')
+      .evaluateAll(
+        (els) =>
+          els.filter(
+            (el) => getComputedStyle(el).opacity === '0' && !el.closest('[aria-hidden="true"]'),
+          ).length,
+      );
+    expect(hidden).toBe(0);
+    const bar = page.locator('#skills [data-reveal="bar"]').first();
+    expect(await bar.evaluate((el) => el.clientWidth / el.parentElement!.clientWidth)).toBeCloseTo(
+      0.98,
+      2,
+    );
+  });
+});
+
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
@@ -218,5 +293,57 @@ test.describe('reduced motion', () => {
     await page.waitForTimeout(3000);
     expect(await visibleRole()).toEqual(before);
     await expect(page.locator('body > div.pointer-events-none.fixed')).toHaveCount(0);
+  });
+});
+
+test.describe('security', () => {
+  const EXPECTED_HEADERS: Record<string, RegExp> = {
+    'content-security-policy': /default-src 'self'.*frame-ancestors 'none'.*object-src 'none'/,
+    'strict-transport-security': /^max-age=63072000; includeSubDomains; preload$/,
+    'cross-origin-opener-policy': /^same-origin$/,
+    'x-content-type-options': /^nosniff$/,
+    'x-frame-options': /^DENY$/,
+    'referrer-policy': /^strict-origin-when-cross-origin$/,
+    'permissions-policy': /camera=\(\).*microphone=\(\).*geolocation=\(\)/,
+  };
+
+  for (const path of ['/', '/robots.txt', '/opengraph-image']) {
+    test(`sends the security headers on ${path}`, async ({ request }) => {
+      const res = await request.get(path);
+      expect(res.status()).toBe(200);
+      const headers = res.headers();
+      for (const [name, pattern] of Object.entries(EXPECTED_HEADERS)) {
+        expect(headers[name], name).toMatch(pattern);
+      }
+      expect(headers['x-powered-by']).toBeUndefined();
+    });
+  }
+
+  test('the page runs without Content Security Policy violations', async ({ page, isMobile }) => {
+    const violations: string[] = [];
+    await page.exposeFunction('reportCspViolation', (v: string) => violations.push(v));
+    await page.addInitScript(() => {
+      document.addEventListener('securitypolicyviolation', (e) => {
+        (window as unknown as { reportCspViolation: (v: string) => void }).reportCspViolation(
+          `${e.violatedDirective} blocked ${e.blockedURI || '(inline)'}`,
+        );
+      });
+    });
+    page.on('console', (msg) => {
+      if (/Content[- ]Security[- ]Policy/i.test(msg.text())) violations.push(msg.text());
+    });
+
+    await page.goto('/');
+    await scrollThrough(page);
+    // Exercise the interactive parts too.
+    if (isMobile) {
+      await page.getByRole('button', { name: 'Open menu' }).click();
+      await page.getByRole('button', { name: 'Close menu' }).click();
+    } else {
+      await page.mouse.move(400, 300);
+      await page.mouse.move(800, 500);
+    }
+    await page.waitForTimeout(500);
+    expect(violations).toEqual([]);
   });
 });
