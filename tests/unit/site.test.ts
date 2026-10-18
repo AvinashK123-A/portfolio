@@ -5,7 +5,7 @@ import { DEFAULT_SITE_URL, resolveSiteUrl } from '@/data/site';
 
 describe('resolveSiteUrl', () => {
   it('falls back to the Vercel production URL when unset or blank', () => {
-    expect(DEFAULT_SITE_URL).toBe('https://portfolio-avinash-reddy-s-projects1.vercel.app');
+    expect(DEFAULT_SITE_URL).toBe('https://portfolio-xi-three-4uo4n9ctro.vercel.app');
     expect(resolveSiteUrl(undefined)).toBe(DEFAULT_SITE_URL);
     expect(resolveSiteUrl('')).toBe(DEFAULT_SITE_URL);
     expect(resolveSiteUrl('   ')).toBe(DEFAULT_SITE_URL);
