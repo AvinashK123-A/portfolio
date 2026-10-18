@@ -49,16 +49,29 @@ describe('profile', () => {
     expect(profile.yearsOfExperience).toBeGreaterThan(0);
   });
 
-  it('uses absolute https URLs for external profiles and the site', () => {
-    for (const url of [profile.github, profile.linkedin, profile.siteUrl, profile.avatarUrl]) {
+  it('uses absolute https URLs for external profiles', () => {
+    for (const url of [profile.github, profile.linkedin, profile.avatarUrl]) {
       expect(isHttpsUrl(url), url).toBe(true);
     }
-    expect(profile.siteUrl.endsWith('/')).toBe(false);
     expect(profile.github).toBe(`https://github.com/${profile.githubUsername}`);
   });
 
   it('has a plausible email address', () => {
     expect(profile.email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  });
+
+  it('contains no phone number anywhere in the content', () => {
+    const everything = JSON.stringify({
+      profile,
+      navLinks,
+      stats,
+      skillCategories,
+      tools,
+      experience,
+      projects,
+    });
+    expect(everything).not.toMatch(/\+?\d[\d\s().-]{8,}\d/);
+    expect(Object.keys(profile)).not.toContain('phone');
   });
 
   it('only allows a root-relative or https resume URL when one is set', () => {

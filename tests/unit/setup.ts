@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
-// jsdom lacks these browser APIs; Framer Motion and our hooks rely on them.
+// jsdom lacks these browser APIs; the animation components rely on them.
 class MockIntersectionObserver {
   readonly root = null;
   readonly rootMargin = '';
