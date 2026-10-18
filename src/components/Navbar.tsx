@@ -1,14 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { navLinks, profile } from '@/data/portfolio';
+import type { NavLink } from '@/data/portfolio';
 import { DownloadIcon } from '@/components/icons';
 
 const MOBILE_MENU_ID = 'mobile-menu';
 
-export default function Navbar() {
+export interface NavbarProps {
+  links: readonly NavLink[];
+  /** Short display name next to the logo. */
+  name: string;
+  initials: string;
+  /** Shows the resume buttons when set. */
+  resumeUrl: string | null;
+}
+
+/**
+ * Fixed header with the in-page navigation and the mobile menu. A client
+ * component because of its scroll and menu state; it gets its content as props
+ * so the content module is not bundled into client JavaScript.
+ */
+export default function Navbar({ links: navLinks, name, initials, resumeUrl }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('about');
+  const [activeSection, setActiveSection] = useState(navLinks[0]?.href.slice(1) ?? '');
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -28,7 +42,7 @@ export default function Navbar() {
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [navLinks]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -55,15 +69,15 @@ export default function Navbar() {
       <nav aria-label="Main" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#about" className="flex items-center gap-2 group rounded-lg">
+          <a href={navLinks[0]?.href ?? '#'} className="flex items-center gap-2 group rounded-lg">
             <span
               aria-hidden="true"
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-200"
+              className="w-8 h-8 rounded-lg bg-linear-to-br/srgb from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-200"
             >
-              {profile.initials}
+              {initials}
             </span>
             <span className="text-white font-semibold text-sm opacity-90 group-hover:opacity-100 transition-opacity max-sm:sr-only">
-              {profile.name}
+              {name}
             </span>
           </a>
 
@@ -83,11 +97,11 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
-            {profile.resumeUrl && (
+            {resumeUrl && (
               <a
-                href={profile.resumeUrl}
+                href={resumeUrl}
                 download
-                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium hover:from-blue-500 hover:to-purple-500 transition-all duration-200 hover:scale-105 active:scale-95"
+                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r/srgb from-blue-600 to-purple-600 text-white text-sm font-medium hover:from-blue-500 hover:to-purple-500 transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 <DownloadIcon className="w-4 h-4" />
                 Resume
@@ -150,11 +164,11 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          {profile.resumeUrl && (
+          {resumeUrl && (
             <a
-              href={profile.resumeUrl}
+              href={resumeUrl}
               download
-              className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium"
+              className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r/srgb from-blue-600 to-purple-600 text-white text-sm font-medium"
             >
               <DownloadIcon className="w-4 h-4" />
               Download Resume
