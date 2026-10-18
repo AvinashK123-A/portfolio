@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { profile } from '@/data/portfolio';
+import { siteUrl } from '@/data/site';
 
 export const dynamic = 'force-static';
 
@@ -7,7 +7,7 @@ export const dynamic = 'force-static';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: `${profile.siteUrl}/`,
+      url: `${siteUrl}/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,

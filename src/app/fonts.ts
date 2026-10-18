@@ -16,7 +16,7 @@ export const jetBrainsMono = localFont({
   weight: '100 800',
   style: 'normal',
   display: 'swap',
-  variable: '--font-mono',
+  variable: '--font-jetbrains-mono',
   preload: false,
   fallback: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
 });

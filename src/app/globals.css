@@ -1,6 +1,112 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS 4, configured here (there is no tailwind.config file). */
+@import 'tailwindcss' source(none);
+@source '../app';
+@source '../components';
+@source '../sections';
+
+@theme {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e9ff;
+  --color-primary-200: #c7d7ff;
+  --color-primary-300: #a4bbff;
+  --color-primary-400: #7b96ff;
+  --color-primary-500: #5667ff;
+  --color-primary-600: #3a42f5;
+  --color-primary-700: #2e33e1;
+  --color-primary-800: #272cb5;
+  --color-primary-900: #252c8f;
+  --color-primary-950: #161854;
+
+  --color-accent-50: #fef3ff;
+  --color-accent-100: #fce4ff;
+  --color-accent-200: #f9c9fe;
+  --color-accent-300: #f59dfc;
+  --color-accent-400: #ec5ef8;
+  --color-accent-500: #d926ec;
+  --color-accent-600: #b81eca;
+  --color-accent-700: #9417a5;
+  --color-accent-800: #7a1486;
+  --color-accent-900: #671470;
+  --color-accent-950: #430048;
+
+  --color-dark-50: #f6f6f9;
+  --color-dark-100: #ecedf2;
+  --color-dark-200: #d5d7e2;
+  --color-dark-300: #b1b5c9;
+  --color-dark-400: #868cac;
+  --color-dark-500: #676e92;
+  --color-dark-600: #535878;
+  --color-dark-700: #454962;
+  --color-dark-800: #3c3f53;
+  --color-dark-900: #353747;
+  --color-dark-950: #0a0b14;
+
+  /*
+   * Default-palette shades the site uses, pinned to their Tailwind 3 sRGB
+   * values so the migration to Tailwind 4 (whose defaults are OKLCH) does not
+   * shift any colour.
+   */
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-blue-300: #93c5fd;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+
+  --animate-hero-float: hero-float 5s ease-in-out infinite;
+  --animate-glow-fade: glow-fade 4s ease-in-out infinite;
+  --animate-hero-enter: hero-enter 0.5s ease-out backwards;
+  --animate-pulse-dot: pulse-dot 1.5s ease-in-out infinite;
+
+  @keyframes hero-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  @keyframes glow-fade {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes hero-enter {
+    from {
+      transform: translateY(16px);
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.6;
+    }
+  }
+}
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -19,6 +125,12 @@
 }
 
 @layer base {
+  /* Tailwind 4 gives buttons the default cursor; keep Tailwind 3's pointer. */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
@@ -47,7 +159,7 @@
 
 @layer components {
   .skip-link {
-    @apply fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-dark-950 shadow-lg transition-transform;
+    @apply fixed left-4 top-4 z-100 -translate-y-24 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-dark-950 shadow-lg transition-transform;
   }
   .skip-link:focus {
     @apply translate-y-0;
@@ -65,7 +177,7 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 via-accent-400 to-primary-300 bg-clip-text text-transparent;
+    @apply bg-linear-to-r/srgb from-primary-400 via-accent-400 to-primary-300 bg-clip-text text-transparent;
   }
   .btn-primary {
     @apply relative px-8 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300;
@@ -82,14 +194,94 @@
     @apply bg-white/10 border-white/40;
     transform: translateY(-2px);
   }
+  /* Same surface as .glass-card, but pill-shaped. */
   .skill-badge {
-    @apply px-4 py-2 rounded-full text-sm font-medium glass-card text-white/85 transition-all duration-300;
+    @apply px-4 py-2 rounded-full text-sm font-medium bg-white/5 backdrop-blur-xl border border-white/10 text-white/85 transition-all duration-300;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   .section-title {
     @apply text-4xl md:text-5xl font-bold mb-4;
   }
   .section-subtitle {
     @apply text-lg text-white/70 mb-16 max-w-2xl mx-auto text-center;
+  }
+}
+
+/*
+ * Scroll-triggered entrance animations (see src/components/reveal.ts).
+ * Elements wait hidden until <ScrollReveal> marks them with data-revealed, then
+ * play their keyframes once. `backwards` fill only covers the delay, so hover
+ * transforms work normally afterwards.
+ */
+[data-reveal]:not([data-revealed]) {
+  opacity: 0;
+}
+[data-reveal='bar']:not([data-revealed]) {
+  opacity: 1;
+  width: 0;
+}
+[data-reveal='bar'] {
+  width: var(--level);
+}
+[data-reveal][data-revealed] {
+  animation: var(--reveal-name) var(--reveal-duration, 0.6s) var(--reveal-easing, ease-out)
+    var(--reveal-delay, 0s) backwards;
+}
+[data-reveal='up'] {
+  --reveal-name: reveal-up;
+}
+[data-reveal='left'] {
+  --reveal-name: reveal-left;
+}
+[data-reveal='right'] {
+  --reveal-name: reveal-right;
+}
+[data-reveal='pop'] {
+  --reveal-name: reveal-pop;
+  /* Overshoots slightly, like a spring. */
+  --reveal-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-reveal='scale'] {
+  --reveal-name: reveal-scale;
+}
+[data-reveal='bar'] {
+  --reveal-name: reveal-bar;
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+@keyframes reveal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@keyframes reveal-bar {
+  from {
+    width: 0;
   }
 }
 
