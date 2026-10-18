@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # 22 is what Vercel builds with (package.json "engines"); 24, the newer
+        # LTS line, is checked so an upgrade holds no surprises.
+        node-version: [22, 24]
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Unit tests with coverage
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        if: matrix.node-version == 22
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        if: matrix.node-version == 22
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure() && matrix.node-version == 22
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      # Mobile preset (Lighthouse's default), 3 runs, median scores asserted in
+      # lighthouserc.json: performance >= 0.9, accessibility 1, best practices
+      # >= 0.95, SEO 1. `npm run lhci` runs a pinned @lhci/cli through npx instead
+      # of a devDependency, so its large dependency tree stays out of npm audit.
+      - name: Lighthouse CI
+        if: matrix.node-version == 22
+        run: |
+          export CHROME_PATH="$(node -e "console.log(require('@playwright/test').chromium.executablePath())")"
+          npm run lhci
+
+      - name: Upload Lighthouse reports
+        if: always() && matrix.node-version == 22
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          if-no-files-found: ignore
+          retention-days: 14
